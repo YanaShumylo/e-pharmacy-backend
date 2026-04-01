@@ -1,13 +1,42 @@
 import { model, Schema } from 'mongoose';
 
 const usersSchema = new Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: {type: String, required: true},
-    password: { type: String, required: true },
-  },
-  { timestamps: true, versionKey: false },
+{
+        image: {
+            type: String,
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            required: true
+        },
+        spent: {
+            type: Number,
+            default: 0,
+        },
+        phone: {
+            type: String,
+            required: true,
+        },
+
+        address: {
+            type: String,
+            required: true,
+        },
+        register_date: {
+            type: Date,
+            default: Date.now
+        },
+    },
+    { versionKey: false }
 );
 
 usersSchema.methods.toJSON = function () {
@@ -16,4 +45,4 @@ usersSchema.methods.toJSON = function () {
   return obj;
 };
 
-export const UsersCollection = model('users', usersSchema);
+export const UsersCollection = model('customers', usersSchema);

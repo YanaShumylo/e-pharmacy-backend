@@ -13,7 +13,6 @@ export const getUserInfoController = async (req, res, next) => {
         id: req.user._id,
         name: req.user.name,
         email: req.user.email,
-        phone: req.user.phone,
       },
     });
   } catch (err) {
