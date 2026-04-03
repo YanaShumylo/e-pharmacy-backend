@@ -10,7 +10,7 @@ const pharmaciesSchema = new Schema(
 
     location: {
     type: { type: String, enum: ['Point'], required: true },
-    coordinates: { type: [Number], required: true }, 
+    coordinates: { type: [Number], required: true },
     },
     },
 
@@ -20,4 +20,4 @@ const pharmaciesSchema = new Schema(
 
 pharmaciesSchema.index({ location: '2dsphere' });
 
-export const Pharmacy = model('pharmacies', pharmaciesSchema);
+export const pharmacyCollection = model('pharmacies', pharmaciesSchema);

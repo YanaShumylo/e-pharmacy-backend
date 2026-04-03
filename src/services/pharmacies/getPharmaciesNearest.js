@@ -1,7 +1,7 @@
-import { Pharmacy } from "../../db/models/pharmacy.js";
+import { pharmacyCollection } from "../../db/models/pharmacy.js";
 
 export const getPharmaciesNearest = async ({ lat, lng, radius = 2000, limit = 6 }) => {
-  const pharmacies = await Pharmacy.aggregate([
+  const pharmacies = await pharmacyCollection.aggregate([
     {
       $geoNear: {
         near: { type: "Point", coordinates: [Number(lng), Number(lat)] },

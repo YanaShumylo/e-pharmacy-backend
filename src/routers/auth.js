@@ -6,7 +6,7 @@ import { loginUserController } from '../controllers/auth/loginUserController.js'
 import { logoutUserController } from '../controllers/auth/logoutUserController.js';
 import { refreshUserSessionController } from '../controllers/auth/refresh.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { getUserInfoController } from '../controllers/getUserInfoController.js';
+import { getUserInfoController } from '../controllers/auth/getUserInfoController.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
