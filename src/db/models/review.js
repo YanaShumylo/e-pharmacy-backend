@@ -4,20 +4,17 @@ const reviewsSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
+      ref:'customers',
       required: true,
+    },
+    photo: {
+      type: String,
     },
     name: {
       type: String,
       required: true,
     },
-    rating: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 5,
-    },
-    comment: {
+    testimonial: {
       type: String,
       required: true,
     },
