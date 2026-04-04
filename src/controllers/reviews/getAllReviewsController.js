@@ -9,6 +9,6 @@ export const getAllReviewsController = async (req, res) => {
     res.status(200).json({
         status: 200,
         message: 'Successfully found reviews!',
-        ...reviews
+        ...reviews,
     });
 };
