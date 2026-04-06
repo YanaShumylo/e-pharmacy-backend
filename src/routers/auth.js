@@ -8,11 +8,13 @@ import { refreshUserSessionController } from '../controllers/auth/refresh.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { getUserInfoController } from '../controllers/auth/getUserInfoController.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/multer.js';
 
 const router = Router();
 
 router.post(
   '/register',
+  upload.single('image'),
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
 );
