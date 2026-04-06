@@ -11,7 +11,7 @@ router.get(
 
 router.get(
     '/:productId',
-    isValidId,
+    isValidId('productId'),
     ctrlWrapper(getOneProductIdController)
 );
 
