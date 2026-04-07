@@ -1,0 +1,44 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: E-Pharmacy app
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description:
+    This is the documentation of E-Pharmacy - a web platform for online pharmacies.
+tags:
+  - name: Auth
+    description: Auth operations.
+servers:
+  - url:
+  - url: http://localhost:4000/api
+paths:
+  # ендпоінти авторизації
+  /api/user/register:
+    post:
+      $ref: ../swagger/paths/auth/register.yaml
+  /api/user/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /api/user/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
+  /api/user/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+
+  # ендпоінти по роботі з користувачами
+  /api/user/user-info:
+    get:
+      $ref: ../swagger/paths/auth/getUserInfo.yaml
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionId

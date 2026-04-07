@@ -1,0 +1,39 @@
+tags:
+  - Auth
+summary: Get current user info
+operationId: getUserInfo
+description: Retrieve information about the currently authenticated user
+security:
+  - cookieAuth: []
+responses:
+  '200':
+    description: Successfully retrieved user info
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: User info retrieved successfully
+            data:
+              type: object
+              required: [id, name, email]
+              properties:
+                id:
+                  type: string
+                  example: 68f153057a84e60b2e094f14
+                name:
+                  type: string
+                  example: Inga Violovska
+                email:
+                  type: string
+                  example: user@gmail.com
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

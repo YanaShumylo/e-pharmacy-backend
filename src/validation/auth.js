@@ -10,7 +10,7 @@ export const registerUserSchema = Joi.object({
   }),
   password: Joi.string().min(8).max(50).pattern(passwordPattern).required().messages({ "any.required": "Password is required", "string.empty": "Password cannot be empty", "string.min": "Password must be at least 8 characters", "string.max": "Password must be at most 64 characters", "string.pattern.base": "The password must contain uppercase and lowercase letters, a number, and a special character.",
   }),
-  spent: Joi.number().min(0).required().messages({"any.required":"Spent is required"}),
+  spent: Joi.number().required().messages({"any.required":"Spent is required"}),
   phone: Joi.string().pattern(/^\+?[1-9]\d{7,14}$/).required().messages({ "any.required": "Phone number is required", "string.empty": "Phone number cannot be empty", "string.pattern.base": "Invalid phone number format.",
   }),
   address: Joi.string().trim().min(5).required().messages({ "any.required": "Address is required", "string.empty": "Address cannot be empty", "string.min": "Address must be at least 5 characters long",

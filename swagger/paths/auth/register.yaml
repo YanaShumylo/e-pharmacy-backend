@@ -1,0 +1,102 @@
+tags:
+  - Auth
+summary: Register new user
+operationId: registerUser
+description: Register a new user account.
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - email
+          - password
+          - spent
+          - phone
+          - address
+        properties:
+          image:
+            type: string
+            format: uri
+            description: Optional user image URL
+          name:
+            type: string
+            minLength: 3
+            maxLength: 25
+            pattern: "^[A-Za-zА-Яа-яІіЇїЄє]+([ '-][A-Za-zА-Яа-яІіЇїЄє]+)*$"
+            example: Inga Violovska
+          email:
+            type: string
+            format: email
+            example: user@gmail.com
+          password:
+            type: string
+            minLength: 8
+            maxLength: 50
+            pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,64}$"
+            example: StrongPass1!
+          spent:
+            type: number
+            example: 230
+          phone:
+            type: string
+            pattern: "^\\+?[1-9]\\d{7,14}$"
+            example: "+380994056328"
+          address:
+            type: string
+            minLength: 5
+            example: Kuivska 17
+responses:
+  '201':
+    description: Successfully registered a user
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message, data]
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully registered a user!
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 68f153057a84e60b2e094f14
+                email:
+                  type: string
+                  example: user@gmail.com
+                name:
+                  type: string
+                  example: Inga Violovska
+                createdAt:
+                  type: string
+                  format: date-time
+                updatedAt:
+                  type: string
+                  format: date-time
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '409':
+    description: Email already in use
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [status, message]
+          properties:
+            status:
+              type: integer
+              example: 409
+            message:
+              type: string
+              example: Email in use
+  '500':
+    $ref: ../../components/responses/500.yaml
