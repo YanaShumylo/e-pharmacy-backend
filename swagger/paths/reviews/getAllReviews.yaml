@@ -3,6 +3,7 @@ tags:
 summary: Get list of reviews
 operationId: getAllReviews
 description: Public endpoint. Supports pagination.
+security: []
 parameters:
   - in: query
     name: page
