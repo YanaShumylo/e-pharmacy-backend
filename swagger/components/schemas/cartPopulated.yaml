@@ -1,0 +1,33 @@
+type: object
+required:
+  - _id
+  - user
+  - items
+properties:
+  _id:
+    type: string
+    example: '68fad270e7f1469dd713faef'
+  user:
+    type: string
+    example: '68fad270e7f1469dd713fa11'
+  items:
+    type: array
+    items:
+      type: object
+      required:
+        - product
+        - quantity
+      properties:
+        product:
+          $ref: './product.yaml'
+        quantity:
+          type: integer
+          example: 2
+  createdAt:
+    type: string
+    format: date-time
+    example: '2026-04-07T12:34:56.789Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2026-04-07T12:34:56.789Z'

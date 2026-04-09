@@ -1,0 +1,98 @@
+tags:
+  - Pharmacies
+summary: Get nearest pharmacies
+operationId: getPharmaciesNearest
+description: Public endpoint. Returns pharmacies near given coordinates. Supports pagination.
+security: []
+parameters:
+  - in: query
+    name: lat
+    required: true
+    schema:
+      type: number
+      example: 49.5535
+    description: Latitude
+  - in: query
+    name: lng
+    required: true
+    schema:
+      type: number
+      example: 25.5948
+    description: Longitude
+  - in: query
+    name: radius
+    required: false
+    schema:
+      type: number
+      default: 2000
+      example: 2000
+    description: Search radius in meters
+  - in: query
+    name: page
+    schema:
+      type: integer
+      default: 1
+    description: Page number
+  - in: query
+    name: limit
+    schema:
+      type: integer
+      default: 12
+    description: Number of pharmacies per page
+responses:
+  '200':
+    description: Nearest pharmacies fetched successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+            - page
+            - limit
+            - totalItems
+            - totalPages
+            - hasNextPage
+            - hasPreviousPage
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Nearest pharmacies fetched successfully
+            data:
+              type: array
+              items:
+                allOf:
+                  - $ref: '../../components/schemas/pharmacy.yaml'
+                  - type: object
+                    properties:
+                      distance:
+                        type: number
+                        description: Distance to pharmacy in meters
+                        example: 350.5
+            page:
+              type: integer
+              example: 1
+            limit:
+              type: integer
+              example: 12
+            totalItems:
+              type: integer
+              example: 5
+            totalPages:
+              type: integer
+              example: 1
+            hasNextPage:
+              type: boolean
+              example: false
+            hasPreviousPage:
+              type: boolean
+              example: false
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

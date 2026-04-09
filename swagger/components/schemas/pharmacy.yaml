@@ -1,0 +1,61 @@
+type: object
+required:
+  - _id
+  - name
+  - address
+  - city
+  - phone
+  - rating
+  - location
+properties:
+  _id:
+    type: string
+    description: Pharmacy ID
+    example: '68fad270e7f1469dd713faef'
+  name:
+    type: string
+    description: Pharmacy name
+    example: Balzam
+  address:
+    type: string
+    description: Pharmacy address
+    example: Shevchenka 12
+  city:
+    type: string
+    description: Pharmacy city
+    example: Ternopil
+  phone:
+    type: string
+    description: Pharmacy phone
+    example: "+380994056328"
+  rating:
+    type: number
+    description: Pharmacy rating
+    example: 4
+  location:
+    type: object
+    required:
+      - type
+      - coordinates
+    properties:
+      type:
+        type: string
+        enum: [Point]
+        description: Location pharmacy
+        example: Point
+      coordinates:
+        type: array
+        items:
+          type: array
+          description: Coordinates pharmacy
+          example: [25.5948, 49.5535]
+  createdAt:
+    type: string
+    format: date-time
+    description: Document creation date
+    example: '2026-04-07T12:34:56.789Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: Last update date
+    example: '2026-04-07T12:34:56.789Z'

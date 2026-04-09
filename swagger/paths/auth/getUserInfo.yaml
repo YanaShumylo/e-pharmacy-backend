@@ -21,18 +21,7 @@ responses:
               type: string
               example: User info retrieved successfully
             data:
-              type: object
-              required: [id, name, email]
-              properties:
-                id:
-                  type: string
-                  example: 68f153057a84e60b2e094f14
-                name:
-                  type: string
-                  example: Inga Violovska
-                email:
-                  type: string
-                  example: user@gmail.com
+              $ref: '../../components/schemas/userShort.yaml'
   '401':
     $ref: ../../components/responses/401.yaml
   '500':

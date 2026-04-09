@@ -1,0 +1,60 @@
+tags:
+  - Carts
+summary: Update cart for a user
+operationId: updateCart
+description: Create or update the cart for the authenticated user. Replaces all items in the cart.
+security:
+  - cookieAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - items
+        properties:
+          items:
+            type: array
+            description: List of items to set in the cart
+            items:
+              type: object
+              required:
+                - product
+                - quantity
+              properties:
+                product:
+                  type: string
+                  example: '68fad270e7f1469dd713faef'
+                quantity:
+                  type: integer
+                  minimum: 1
+                  example: 2
+responses:
+  '200':
+    description: Cart updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Cart updated
+            data:
+              $ref: '../../components/schemas/cart.yaml'
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

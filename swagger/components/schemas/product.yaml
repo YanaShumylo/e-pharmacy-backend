@@ -1,0 +1,76 @@
+type: object
+required:
+  - _id
+  - name
+  - brand
+  - description
+  - price
+  - stock
+  - category
+  - supplier
+  - rating
+properties:
+  _id:
+    type: string
+    description: Product ID
+    example: '68fad270e7f1469dd713faef'
+  photo:
+    type: string
+    description: Optional product image URL
+    example: 'https://example.com/images/products/product1.png'
+  name:
+    type: string
+    description: Product name
+    example: Aspirin
+  brand:
+    type: string
+    description: Product brand
+    example: Bayer
+  description:
+    type: string
+    description: Product description
+    example: Pain reliever and anti-inflammatory medication
+  price:
+    type: number
+    description: Product price
+    minimum: 0
+    example: 9.99
+  stock:
+    type: number
+    description: Number of items in stock
+    minimum: 0
+    example: 50
+  category:
+    type: string
+    description: Product category
+    enum:
+      - heart
+      - medicine
+      - head
+      - hand
+      - leg
+    example: medicine
+  supplier:
+    type: string
+    description: Supplier name
+    example: Pharma Supply Ltd.
+  rating:
+    type: number
+    description: Average product rating
+    example: 4
+  reviews:
+    type: array
+    description: List of review IDs related to the product
+    items:
+      type: string
+      example: '68fad270e7f1469dd713fa11'
+  createdAt:
+    type: string
+    format: date-time
+    description: Date when the product was created
+    example: '2026-04-07T12:34:56.789Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: Date when the product was last updated
+    example: '2026-04-07T12:34:56.789Z'

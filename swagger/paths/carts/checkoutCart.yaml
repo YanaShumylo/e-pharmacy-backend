@@ -1,0 +1,96 @@
+tags:
+  - Carts
+summary: Checkout the cart for the authenticated user
+operationId: checkoutCart
+description: Place an order for all items in the user's cart. Empties the cart after checkout.
+security:
+  - cookieAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        description: Additional order data (e.g., shipping info, payment method)
+        properties:
+          shippingAddress:
+            type: string
+            example: "Kuivska 17, Kyiv, Ukraine"
+            description: Shipping address for the order
+          paymentMethod:
+            type: string
+            example: "Credit Card"
+            description: Payment method for the order
+          notes:
+            type: string
+            example: "Leave package at the front door"
+            description: Optional notes for the order
+responses:
+  '200':
+    description: Order placed successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Order placed successfully
+            data:
+              type: object
+              required:
+                - user
+                - items
+                - total
+              properties:
+                user:
+                  type: string
+                  description: ID of the user placing the order
+                  example: '68fad270e7f1469dd713fa11'
+                items:
+                  type: array
+                  description: List of items in the order
+                  items:
+                    type: object
+                    required:
+                      - product
+                      - quantity
+                    properties:
+                      product:
+                        $ref: '../../components/schemas/product.yaml'
+                      quantity:
+                        type: integer
+                        description: Quantity of the product
+                        minimum: 1
+                        example: 2
+                total:
+                  type: number
+                  description: Total price of the order
+                  example: 45.98
+                shippingAddress:
+                  type: string
+                  description: Shipping address provided by the user
+                  example: "Kuivska 17, Kyiv, Ukraine"
+                paymentMethod:
+                  type: string
+                  description: Payment method used
+                  example: "Credit Card"
+                notes:
+                  type: string
+                  description: Optional notes for the order
+                  example: "Leave package at the front door"
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

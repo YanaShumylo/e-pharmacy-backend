@@ -33,6 +33,37 @@ paths:
     get:
       $ref: ../swagger/paths/auth/getUserInfo.yaml
 
+  # ендпоінти, що повертає відгуки користувачів
+  /api/customer-reviews:
+    get:
+      $ref: ../swagger/paths/reviews/getAllReviews.yaml
+
+  # ендпоінти по роботі з аптеками
+  /api/stores:
+    get:
+      $ref: ../swagger/paths/pharmacies/getAllPharmacies.yaml
+  /api/stores/nearest:
+    get:
+      $ref: ../swagger/paths/pharmacies/getPharmaciesNearest.yaml
+
+    # ендпоінти по роботі з ліками
+  /api/products:
+    get:
+      $ref: ../swagger/paths/products/getAllProducts.yaml
+  /api/products/{productId}:
+    get:
+      $ref: ../swagger/paths/products/getOneProductId.yaml
+
+    # ендпоінти по роботі з товарами у кошику
+  /api/cart:
+    get:
+      $ref: ../swagger/paths/carts/getCartItems.yaml
+  /api/cart/update:
+    put:
+      $ref: ../swagger/paths/carts/updateCart.yaml
+  /api/cart/checkout:
+    post:
+      $ref: ../swagger/paths/carts/checkoutCart.yaml
 components:
   securitySchemes:
     bearerAuth:

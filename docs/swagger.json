@@ -1,0 +1,1824 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "E-Pharmacy app",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is the documentation of E-Pharmacy - a web platform for online pharmacies."
+  },
+  "servers": [
+    {
+      "url": null
+    },
+    {
+      "url": "http://localhost:4000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth operations."
+    }
+  ],
+  "paths": {
+    "/api/user/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register new user",
+        "operationId": "registerUser",
+        "description": "Register a new user account.",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password",
+                  "spent",
+                  "phone",
+                  "address"
+                ],
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Optional user image URL"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 25,
+                    "pattern": "^[A-Za-zА-Яа-яІіЇїЄє]+([ '-][A-Za-zА-Яа-яІіЇїЄє]+)*$",
+                    "example": "Inga Violovska"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 50,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,64}$",
+                    "example": "StrongPass1!"
+                  },
+                  "spent": {
+                    "type": "number",
+                    "example": 230
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^\\+?[1-9]\\d{7,14}$",
+                    "example": "+380994056328"
+                  },
+                  "address": {
+                    "type": "string",
+                    "minLength": 5,
+                    "example": "Kuivska 17"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/userPublic"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "description": "Email already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 409
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user with email and password",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 50,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,64}$",
+                    "example": "StrongPass1!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in an user and set authentication cookies",
+            "headers": {
+              "Set-Cookie": {
+                "description": "HTTP-only cookie with session or refresh token.\n",
+                "schema": {
+                  "type": "string",
+                  "example": "sessionId=abc123; HttpOnly; Secure; SameSite=Strict"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/user/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user by clearing session",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully logged out. All authentication cookies have been cleared.",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Cookies cleared by the server. Example: `Set-Cookie: sessionId=; HttpOnly; SameSite=Strict`\n",
+                "schema": {
+                  "type": "string",
+                  "example": "sessionId=; HttpOnly; SameSite=Strict"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/user/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh session",
+        "operationId": "refreshUserSession",
+        "description": "Refresh the user session",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully refreshed session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully refreshed a session!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/user/user-info": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get current user info",
+        "operationId": "getUserInfo",
+        "description": "Retrieve information about the currently authenticated user",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User info retrieved successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/userShort"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/customer-reviews": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get list of reviews",
+        "operationId": "getAllReviews",
+        "description": "Public endpoint. Supports pagination.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 12
+            },
+            "description": "Number of reviews per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of reviews with pagination",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "page",
+                    "limit",
+                    "totalItems",
+                    "totalPages",
+                    "hasNextPage",
+                    "hasPreviousPage"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found reviews!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/review"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 24
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "hasNextPage": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "hasPreviousPage": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/stores": {
+      "get": {
+        "tags": [
+          "Pharmacies"
+        ],
+        "summary": "Get list of pharmacies",
+        "operationId": "getAllPharmacies",
+        "description": "Public endpoint. Supports pagination.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 12
+            },
+            "description": "Number of pharmacies per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pharmacies with pagination",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "page",
+                    "limit",
+                    "totalItems",
+                    "totalPages",
+                    "hasNextPage",
+                    "hasPreviousPage"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Pharmacies fetched successfully!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/pharmacy"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "hasNextPage": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "hasPreviousPage": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/stores/nearest": {
+      "get": {
+        "tags": [
+          "Pharmacies"
+        ],
+        "summary": "Get nearest pharmacies",
+        "operationId": "getPharmaciesNearest",
+        "description": "Public endpoint. Returns pharmacies near given coordinates. Supports pagination.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lat",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 49.5535
+            },
+            "description": "Latitude"
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 25.5948
+            },
+            "description": "Longitude"
+          },
+          {
+            "in": "query",
+            "name": "radius",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 2000,
+              "example": 2000
+            },
+            "description": "Search radius in meters"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 12
+            },
+            "description": "Number of pharmacies per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nearest pharmacies fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "page",
+                    "limit",
+                    "totalItems",
+                    "totalPages",
+                    "hasNextPage",
+                    "hasPreviousPage"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Nearest pharmacies fetched successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/pharmacy"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "distance": {
+                                "type": "number",
+                                "description": "Distance to pharmacy in meters",
+                                "example": 350.5
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "hasNextPage": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "hasPreviousPage": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get list of products",
+        "operationId": "getAllProducts",
+        "description": "Public endpoint. Supports pagination and filtering by category and search query.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 12
+            },
+            "description": "Number of products per page"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "heart",
+                "medicine",
+                "head",
+                "hand",
+                "leg"
+              ]
+            },
+            "description": "Filter products by category"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search products by name (case insensitive)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products with pagination and filters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "page",
+                    "limit",
+                    "totalItems",
+                    "totalPages",
+                    "hasNextPage",
+                    "hasPreviousPage"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found products!"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/product"
+                      }
+                    },
+                    "page": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "totalItems": {
+                      "type": "integer",
+                      "example": 36
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "hasNextPage": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "hasPreviousPage": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/products/{productId}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get product by ID",
+        "operationId": "getOneProductId",
+        "description": "Public endpoint. Returns a single product by its ID.",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the product",
+            "example": "68fad270e7f1469dd713faef"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product successfully found."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Get cart items for a user",
+        "operationId": "getCartItems",
+        "description": "Returns the cart of the currently authenticated user, including populated product details.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cart fetched successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/cartPopulated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/cart/update": {
+      "put": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Update cart for a user",
+        "operationId": "updateCart",
+        "description": "Create or update the cart for the authenticated user. Replaces all items in the cart.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "items"
+                ],
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "description": "List of items to set in the cart",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "product",
+                        "quantity"
+                      ],
+                      "properties": {
+                        "product": {
+                          "type": "string",
+                          "example": "68fad270e7f1469dd713faef"
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "example": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cart updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cart updated"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/cart"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/cart/checkout": {
+      "post": {
+        "tags": [
+          "Carts"
+        ],
+        "summary": "Checkout the cart for the authenticated user",
+        "operationId": "checkoutCart",
+        "description": "Place an order for all items in the user's cart. Empties the cart after checkout.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Additional order data (e.g., shipping info, payment method)",
+                "properties": {
+                  "shippingAddress": {
+                    "type": "string",
+                    "example": "Kuivska 17, Kyiv, Ukraine",
+                    "description": "Shipping address for the order"
+                  },
+                  "paymentMethod": {
+                    "type": "string",
+                    "example": "Credit Card",
+                    "description": "Payment method for the order"
+                  },
+                  "notes": {
+                    "type": "string",
+                    "example": "Leave package at the front door",
+                    "description": "Optional notes for the order"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order placed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order placed successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "items",
+                        "total"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "string",
+                          "description": "ID of the user placing the order",
+                          "example": "68fad270e7f1469dd713fa11"
+                        },
+                        "items": {
+                          "type": "array",
+                          "description": "List of items in the order",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "product",
+                              "quantity"
+                            ],
+                            "properties": {
+                              "product": {
+                                "$ref": "#/components/schemas/product"
+                              },
+                              "quantity": {
+                                "type": "integer",
+                                "description": "Quantity of the product",
+                                "minimum": 1,
+                                "example": 2
+                              }
+                            }
+                          }
+                        },
+                        "total": {
+                          "type": "number",
+                          "description": "Total price of the order",
+                          "example": 45.98
+                        },
+                        "shippingAddress": {
+                          "type": "string",
+                          "description": "Shipping address provided by the user",
+                          "example": "Kuivska 17, Kyiv, Ukraine"
+                        },
+                        "paymentMethod": {
+                          "type": "string",
+                          "description": "Payment method used",
+                          "example": "Credit Card"
+                        },
+                        "notes": {
+                          "type": "string",
+                          "description": "Optional notes for the order",
+                          "example": "Leave package at the front door"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionId"
+      }
+    },
+    "schemas": {
+      "userPublic": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "spent",
+          "phone",
+          "address"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "image": {
+            "type": "string",
+            "description": "Optional user image URL",
+            "example": "https://example.com/images/users/default-avatar.png"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Inga Violovska"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "user@gmail.com"
+          },
+          "spent": {
+            "type": "number",
+            "description": "User spent",
+            "example": 230
+          },
+          "phone": {
+            "type": "string",
+            "description": "User phone",
+            "example": "+380994056328"
+          },
+          "address": {
+            "type": "string",
+            "description": "User address",
+            "example": "Kuivska 17"
+          },
+          "register_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the user registered",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      },
+      "userShort": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "email"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "Inga Violovska"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "example": "user@gmail.com"
+          }
+        }
+      },
+      "review": {
+        "type": "object",
+        "required": [
+          "_id",
+          "user",
+          "name",
+          "testimonial"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Review ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "user": {
+            "type": "string",
+            "description": "ID of the user who left the review",
+            "example": "68fad270e7f1469dd713fa11"
+          },
+          "photo": {
+            "type": "string",
+            "description": "Optional photo URL attached to the review",
+            "example": "https://example.com/images/reviews/review1.png"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the reviewer",
+            "example": "Inga Violovska"
+          },
+          "testimonial": {
+            "type": "string",
+            "description": "Review text",
+            "example": "Great service, I really liked everything!"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the review was created",
+            "example": "2026-04-07T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the review was last updated",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      },
+      "pharmacy": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "address",
+          "city",
+          "phone",
+          "rating",
+          "location"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Pharmacy ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "name": {
+            "type": "string",
+            "description": "Pharmacy name",
+            "example": "Balzam"
+          },
+          "address": {
+            "type": "string",
+            "description": "Pharmacy address",
+            "example": "Shevchenka 12"
+          },
+          "city": {
+            "type": "string",
+            "description": "Pharmacy city",
+            "example": "Ternopil"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Pharmacy phone",
+            "example": "+380994056328"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Pharmacy rating",
+            "example": 4
+          },
+          "location": {
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Point"
+                ],
+                "description": "Location pharmacy",
+                "example": "Point"
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "description": "Coordinates pharmacy",
+                  "example": [
+                    25.5948,
+                    49.5535
+                  ]
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Document creation date",
+            "example": "2026-04-07T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update date",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      },
+      "product": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "brand",
+          "description",
+          "price",
+          "stock",
+          "category",
+          "supplier",
+          "rating"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Product ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "photo": {
+            "type": "string",
+            "description": "Optional product image URL",
+            "example": "https://example.com/images/products/product1.png"
+          },
+          "name": {
+            "type": "string",
+            "description": "Product name",
+            "example": "Aspirin"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Product brand",
+            "example": "Bayer"
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description",
+            "example": "Pain reliever and anti-inflammatory medication"
+          },
+          "price": {
+            "type": "number",
+            "description": "Product price",
+            "minimum": 0,
+            "example": 9.99
+          },
+          "stock": {
+            "type": "number",
+            "description": "Number of items in stock",
+            "minimum": 0,
+            "example": 50
+          },
+          "category": {
+            "type": "string",
+            "description": "Product category",
+            "enum": [
+              "heart",
+              "medicine",
+              "head",
+              "hand",
+              "leg"
+            ],
+            "example": "medicine"
+          },
+          "supplier": {
+            "type": "string",
+            "description": "Supplier name",
+            "example": "Pharma Supply Ltd."
+          },
+          "rating": {
+            "type": "number",
+            "description": "Average product rating",
+            "example": 4
+          },
+          "reviews": {
+            "type": "array",
+            "description": "List of review IDs related to the product",
+            "items": {
+              "type": "string",
+              "example": "68fad270e7f1469dd713fa11"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the product was created",
+            "example": "2026-04-07T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the product was last updated",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      },
+      "cartPopulated": {
+        "type": "object",
+        "required": [
+          "_id",
+          "user",
+          "items"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "user": {
+            "type": "string",
+            "example": "68fad270e7f1469dd713fa11"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "product",
+                "quantity"
+              ],
+              "properties": {
+                "product": {
+                  "$ref": "#/components/schemas/product"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "example": 2
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-07T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      },
+      "cart": {
+        "type": "object",
+        "required": [
+          "_id",
+          "user",
+          "items"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Cart ID",
+            "example": "68fad270e7f1469dd713faef"
+          },
+          "user": {
+            "type": "string",
+            "description": "ID of the user who owns the cart",
+            "example": "68fad270e7f1469dd713fa11"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items in the cart",
+            "items": {
+              "type": "object",
+              "required": [
+                "product",
+                "quantity"
+              ],
+              "properties": {
+                "product": {
+                  "type": "string",
+                  "description": "ID of the product in the cart",
+                  "example": "68fad270e7f1469dd713faef"
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Quantity of the product",
+                  "minimum": 1,
+                  "example": 2
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the cart was created",
+            "example": "2026-04-07T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the cart was last updated",
+            "example": "2026-04-07T12:34:56.789Z"
+          }
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "BadRequestError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "errors"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string",
+                            "example": "Name should have at least 3 characters"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "['name']"
+                            }
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "string.min"
+                          },
+                          "context": {
+                            "type": "object"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "UnauthorizedError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access token expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "NotFoundError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Resource not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal Server error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

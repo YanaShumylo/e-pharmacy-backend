@@ -1,0 +1,42 @@
+tags:
+  - Products
+summary: Get product by ID
+operationId: getOneProductId
+description: Public endpoint. Returns a single product by its ID.
+security: []
+parameters:
+  - in: path
+    name: productId
+    required: true
+    schema:
+      type: string
+    description: ID of the product
+    example: '68fad270e7f1469dd713faef'
+responses:
+  '200':
+    description: Product found successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Product successfully found.
+            data:
+              $ref: '../../components/schemas/product.yaml'
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: ../../components/responses/500.yaml

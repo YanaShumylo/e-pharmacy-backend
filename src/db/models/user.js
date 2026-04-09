@@ -20,6 +20,7 @@ const usersSchema = new Schema(
         },
         spent: {
             type: Number,
+            required: true,
             default: 0,
         },
         phone: {
@@ -36,7 +37,7 @@ const usersSchema = new Schema(
             default: Date.now
         },
     },
-    { versionKey: false }
+     { timestamps: true, versionKey: false },
 );
 
 usersSchema.methods.toJSON = function () {

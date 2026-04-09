@@ -65,23 +65,7 @@ responses:
               type: string
               example: Successfully registered a user!
             data:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: 68f153057a84e60b2e094f14
-                email:
-                  type: string
-                  example: user@gmail.com
-                name:
-                  type: string
-                  example: Inga Violovska
-                createdAt:
-                  type: string
-                  format: date-time
-                updatedAt:
-                  type: string
-                  format: date-time
+              $ref: '../../components/schemas/userPublic.yaml'
   '400':
     $ref: ../../components/responses/400.yaml
   '409':

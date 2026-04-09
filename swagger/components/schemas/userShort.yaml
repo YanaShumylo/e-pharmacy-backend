@@ -1,0 +1,20 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+properties:
+  _id:
+    type: string
+    description: User ID
+    example: '68fad270e7f1469dd713faef'
+  name:
+    type: string
+    description: User name
+    example: Inga Violovska
+  email:
+    type: string
+    description: User email
+    example: user@gmail.com
+
+

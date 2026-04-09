@@ -1,0 +1,42 @@
+type: object
+required:
+  - _id
+  - user
+  - items
+properties:
+  _id:
+    type: string
+    description: Cart ID
+    example: '68fad270e7f1469dd713faef'
+  user:
+    type: string
+    description: ID of the user who owns the cart
+    example: '68fad270e7f1469dd713fa11'
+  items:
+    type: array
+    description: List of items in the cart
+    items:
+      type: object
+      required:
+        - product
+        - quantity
+      properties:
+        product:
+          type: string
+          description: ID of the product in the cart
+          example: '68fad270e7f1469dd713faef'
+        quantity:
+          type: integer
+          description: Quantity of the product
+          minimum: 1
+          example: 2
+  createdAt:
+    type: string
+    format: date-time
+    description: Date when the cart was created
+    example: '2026-04-07T12:34:56.789Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: Date when the cart was last updated
+    example: '2026-04-07T12:34:56.789Z'

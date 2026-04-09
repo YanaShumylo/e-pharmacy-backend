@@ -1,0 +1,37 @@
+type: object
+required:
+  - _id
+  - user
+  - name
+  - testimonial
+properties:
+  _id:
+    type: string
+    description: Review ID
+    example: '68fad270e7f1469dd713faef'
+  user:
+    type: string
+    description: ID of the user who left the review
+    example: '68fad270e7f1469dd713fa11'
+  photo:
+    type: string
+    description: Optional photo URL attached to the review
+    example: 'https://example.com/images/reviews/review1.png'
+  name:
+    type: string
+    description: Name of the reviewer
+    example: Inga Violovska
+  testimonial:
+    type: string
+    description: Review text
+    example: "Great service, I really liked everything!"
+  createdAt:
+    type: string
+    format: date-time
+    description: Date when the review was created
+    example: '2026-04-07T12:34:56.789Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: Date when the review was last updated
+    example: '2026-04-07T12:34:56.789Z'

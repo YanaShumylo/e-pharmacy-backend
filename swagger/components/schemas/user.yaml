@@ -1,0 +1,47 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+  - password
+  - spent
+  - phone
+  - address
+properties:
+  _id:
+    type: string
+    description: User ID
+    example: '68fad270e7f1469dd713faef'
+  image:
+    type: string
+    description: Optional user image URL
+    example: 'https://example.com/images/users/default-avatar.png'
+  name:
+    type: string
+    description: User name
+    example: Inga Violovska
+  email:
+    type: string
+    description: User email
+    example: user@gmail.com
+  password:
+    type: string
+    description: User password
+    example: "********"
+  spent:
+    type: number
+    description: User spent
+    example: 230
+  phone:
+    type: string
+    description: User phone
+    example: "+380994056328"
+  address:
+    type: string
+    description: User address
+    example: Kuivska 17
+  register_date:
+    type: string
+    format: date-time
+    description: Date when the user registered
+    example: '2026-04-07T12:34:56.789Z'
