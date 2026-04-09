@@ -11,9 +11,9 @@ tags:
   - name: Auth
     description: Auth operations.
 servers:
-  - url:
-  - url: http://localhost:4000/api
-paths:
+  - url: https://e-pharmacy-backend-ec12.onrender.com
+
+  paths:
   # ендпоінти авторизації
   /api/user/register:
     post:
