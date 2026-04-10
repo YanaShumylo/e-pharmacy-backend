@@ -14,10 +14,6 @@ const PORT = Number(getEnvVar('PORT', '3000'));
 export const startServer = () => {
   const app = express();
 
-    app.use('/uploads', express.static(UPLOAD_DIR));
-
-    app.use('/api-docs', swaggerDocs());
-
     app.use(express.json());
 
     app.use(cors());
@@ -37,6 +33,10 @@ export const startServer = () => {
     message: 'Server is working',
   });
     });
+
+    app.use('/uploads', express.static(UPLOAD_DIR));
+
+    app.use('/api-docs', swaggerDocs());
 
     app.use(router);
 

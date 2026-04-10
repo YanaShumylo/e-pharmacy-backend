@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { getAllPharmaciesController } from '../controllers/pharmacies/getAllPharmaciesController.js';
-import {getPharmaciesNearestController} from '../controllers/pharmacies/getPharmaciesNearestController.js'
+import { getAllPharmaciesController, getPharmaciesNearestController } from '../controllers/pharmacies.js';
 
 const router = Router();
 

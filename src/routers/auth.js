@@ -1,12 +1,8 @@
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { registerUserSchema,loginUserSchema } from '../validation/auth.js';
-import { registerUserController } from '../controllers/auth/registerUserController.js';
-import { loginUserController } from '../controllers/auth/loginUserController.js';
-import { logoutUserController } from '../controllers/auth/logoutUserController.js';
-import { refreshUserSessionController } from '../controllers/auth/refresh.js';
+import { registerUserController, loginUserController, logoutUserController, refreshUserSessionController, getUserInfoController } from '../controllers/auth.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { getUserInfoController } from '../controllers/auth/getUserInfoController.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/multer.js';
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllReviewsController } from "../controllers/reviews/getAllReviewsController.js";
+import { getAllReviewsController } from "../controllers/reviews.js";
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();

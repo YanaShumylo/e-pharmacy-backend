@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
-import { getOneProductIdController } from "../controllers/products/getOneProductIdController.js";
-import { getAllProductsController } from "../controllers/products/getAllProductsController.js";
+import { getOneProductIdController, getAllProductsController } from "../controllers/products.js";
 const router = Router();
 
 router.get(
