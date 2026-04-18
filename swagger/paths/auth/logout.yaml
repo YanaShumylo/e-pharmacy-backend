@@ -13,10 +13,12 @@ responses:
         description: >
           Cookies cleared by the server.
           Example:
-          `Set-Cookie: sessionId=; HttpOnly; SameSite=Strict`
+          Set-Cookie: accessToken=; HttpOnly;
+          Set-Cookie: refreshToken=; HttpOnly;
+          Set-Cookie: sessionId=; HttpOnly
         schema:
           type: string
-          example: sessionId=; HttpOnly; SameSite=Strict
+          example: sessionId=; HttpOnly; 
   '401':
     $ref: ../../components/responses/401.yaml
   '500':

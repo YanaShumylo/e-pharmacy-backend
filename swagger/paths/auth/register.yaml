@@ -7,7 +7,7 @@ security: []
 requestBody:
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         required:
@@ -20,7 +20,7 @@ requestBody:
         properties:
           image:
             type: string
-            format: uri
+            format: binary
             description: Optional user image URL
           name:
             type: string

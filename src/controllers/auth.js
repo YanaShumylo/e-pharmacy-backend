@@ -1,8 +1,9 @@
-import { registerUser,loginUser, logoutUser, refreshUsersSession  } from '../services/auth.js';
+import { registerUser,loginUser, logoutUser, refreshUsersSession, createSession  } from '../services/auth.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { ONE_DAY } from '../constants/index.js';
+import { ONE_DAY, FIFTEEN_MINUTES } from '../constants/index.js';
+import { SessionsCollection } from '../db/models/session.js';
 import createHttpError from 'http-errors';
 
 export const registerUserController = async (req, res) => {
@@ -25,7 +26,13 @@ export const registerUserController = async (req, res) => {
       ...req.body,
       photo: photoUrl,
     };
+
   const user = await registerUser(userData);
+
+  const newSession = await createSession(user._id);
+
+  setupSession(res, newSession);
+
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -34,25 +41,18 @@ export const registerUserController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-  });
+  const user = await loginUser(req.body);
+
+  await SessionsCollection.deleteOne({ userId: user._id });
+
+  const newSession = await createSession(user._id);
+
+  setupSession(res, newSession);
+
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
+      data: user,
   });
 };
 
@@ -60,32 +60,25 @@ export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
   }
-  res.clearCookie('sessionId', {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-  });
-  res.clearCookie('refreshToken', {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-  });
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+  res.clearCookie('sessionId');
+
   res.status(204).send();
 };
 
 const setupSession = (res, session) => {
+  res.cookie('accessToken', session.accessToken, {
+    httpOnly: true,
+    expires: new Date(Date.now() + FIFTEEN_MINUTES),
+  });
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
   });
-
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
   });
 };
 
@@ -94,13 +87,12 @@ export const refreshUserSessionController = async (req, res) => {
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
   });
+
   setupSession(res, session);
+
   res.json({
     status: 200,
     message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
   });
 };
 

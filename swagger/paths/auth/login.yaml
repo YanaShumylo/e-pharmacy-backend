@@ -26,14 +26,14 @@ requestBody:
             example: StrongPass1!
 responses:
   '200':
-    description: Successfully logged in an user and set authentication cookies
+    description: Successfully logged in and set cookies
     headers:
       Set-Cookie:
         description: >
-          HTTP-only cookie with session or refresh token.
+          HTTP-only cookies: accessToken, refreshToken, sessionId
         schema:
           type: string
-          example: sessionId=abc123; HttpOnly; Secure; SameSite=Strict
+          example: accessToken=abc; HttpOnly;
     content:
       application/json:
         schema:
@@ -47,11 +47,7 @@ responses:
               type: string
               example: Successfully logged in an user!
             data:
-              type: object
-              properties:
-                accessToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+              $ref: '../../components/schemas/userPublic.yaml'
   '400':
     $ref: ../../components/responses/400.yaml
   '401':

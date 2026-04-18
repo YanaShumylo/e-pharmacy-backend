@@ -8,11 +8,17 @@ security:
 responses:
   '200':
     description: Successfully refreshed session
+        headers:
+      Set-Cookie:
+        description: Updated authentication cookies
+        schema:
+          type: string
+          example: accessToken=newToken; HttpOnly
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required: [status, message]
           properties:
             status:
               type: integer
@@ -20,12 +26,6 @@ responses:
             message:
               type: string
               example: Successfully refreshed a session!
-            data:
-              type: object
-              properties:
-                accessToken:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
   '401':
     $ref: ../../components/responses/401.yaml
   '500':

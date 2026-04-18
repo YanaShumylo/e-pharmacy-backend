@@ -66,10 +66,7 @@ servers:
       $ref: ../swagger/paths/carts/checkoutCart.yaml
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
     cookieAuth:
       type: apiKey
       in: cookie
-      name: sessionId
+      name: accessToken

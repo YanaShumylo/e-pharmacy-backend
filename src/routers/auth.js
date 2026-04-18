@@ -21,7 +21,7 @@ router.post(
   ctrlWrapper(loginUserController),
 );
 
-router.get(
+router.post(
   '/logout',
   ctrlWrapper(logoutUserController)
 );
