@@ -70,3 +70,8 @@ components:
       type: apiKey
       in: cookie
       name: accessToken
+      description: |
+        Authentication via HTTP-only cookies:
+        - accessToken (short-lived)
+        - refreshToken (long-lived)
+        - sessionId (session identifier)

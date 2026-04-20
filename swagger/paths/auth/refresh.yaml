@@ -8,7 +8,7 @@ security:
 responses:
   '200':
     description: Successfully refreshed session
-        headers:
+    headers:
       Set-Cookie:
         description: Updated authentication cookies
         schema:
